@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Import Leads</title>
+	<link rel="stylesheet" type="text/css" href="{% static '/admin/css/import_leads.css' %}">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+</head>
+<body>
+	<div class="container">
+		<div class="contact-box">
+             <div class="left">
+                    <img src="" alt="">
+                </div>
+			<div class="right">
+				<h2>Facebook_lead File Upload</h2>
+                        <!-- <div class="dropdown">
+                            <button class="dropbtn">Dropdown</button>
+                            <div class="dropdown-content">
+                            <a href="#">Link 1</a>
+                            <a href="#">Link 2</a>
+                            <a href="#">Link 3</a>
+                            </div>
+                        </div> -->
+                        <label for="facebook" style="font-size:25px;">facebook Add Page:</label>
+
+                            <select name="ad_name" id="ad_name">
+								{% for i in page_name_list%}
+                            	<option value={{i.facebook_page}}>{{i.facebook_page}}</option>
+								{% endfor %}
+
+                            </select>
+                        <br><br>
+				<input type="file" class="field" placeholder="Please Enter Builder_name">
+                <button class="btn">Upload</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

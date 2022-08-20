@@ -9,3 +9,18 @@ class FacebookPages(models.Model):
     published_date = models.DateField(null=False,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+
+class FacebookLeadDataDumping(models.Model):
+    facebook_page = models.ForeignKey('FacebookPages',on_delete=models.CASCADE)
+    lead_id =  models.CharField(max_length=100,null=False,blank=False)
+    ad_name = models.CharField(max_length=30,null=False,blank=False)
+    full_name = models.CharField(max_length=50,null=False,blank=False)
+    phone_number = models.CharField(max_length=13,null=False,blank=False)
+    email = models.CharField(max_length=50,null=False,blank=False)
+    created_time = models.DateField(null=False,blank=False)
+    city = models.CharField(max_length=50,null=False,blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_leat_sent = models.BooleanField(default=False,null=True,blank=True)
+
+
+
