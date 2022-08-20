@@ -10,4 +10,4 @@ class FacebookPagesSerializers(ModelSerializer):
 class FacebookLeadDataDumpingSerializers(ModelSerializer):
     class Meta:
         model = FacebookLeadDataDumping
-        exclude = ('created_at','is_leat_sent')
+        exclude = ('created_at','is_lead_sent')

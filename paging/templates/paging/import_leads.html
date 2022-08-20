@@ -2,7 +2,7 @@
 {% load static %}
 <html>
 <head>
-	<title>Contact us</title>
+	<title>Import Leads</title>
     <link rel="stylesheet" type="text/css" href="{% static '/admin/css/import_leads.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
@@ -27,11 +27,18 @@
 
                             </select>
                         <br><br>
-				<input type="file" name="file" class="field" placeholder="Please Enter Builder_name">
+				<input type="file" name="file" class="field" id="fUpload" placeholder="Please Enter Builder_name" onchange="checkextension()" required>
                 <button class="btn">Upload</button>
              </form>
 			</div>
 		</div>
 	</div>
+<script>
+    function checkextension() {
+  var file = document.querySelector("#fUpload");
+  if ( /\.(csv?)$/i.test(file.files[0].name) === false ) { alert("Please Upload Csv only");
+   document.getElementById("fUpload").value = "";}
+}
+</script>
 </body>
 </html>
