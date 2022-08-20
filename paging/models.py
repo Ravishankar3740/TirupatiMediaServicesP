@@ -20,7 +20,7 @@ class FacebookLeadDataDumping(models.Model):
     created_time = models.DateField(null=False,blank=False)
     city = models.CharField(max_length=50,null=False,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_leat_sent = models.BooleanField(default=False,null=True,blank=True)
+    is_lead_sent = models.BooleanField(default=False,null=True,blank=True)
 
 
 
