@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Contact us</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/css/import_leads.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+</head>
+<body>
+	<div class="container">
+		<div class="contact-box">
+             <div class="left">
+                    <img src="{% static '/admin/img/upload.png' %}" alt="">
+                </div>
+			<div class="right">
+                <form action="{% url 'dump_facebook_lead_data' %}" method="post" enctype="multipart/form-data">
+				    <h2>Facebook_lead File Upload</h2>
+                    {% csrf_token %}
+                      <label for="facebook" style="font-size:25px;">Page name:</label>
+
+                            <select name="ad_name" id="ad_name" required>
+                                <option value="">Select Ad</option>
+                                {% for i in page_name_list%}
+                            	<option value="{{i.facebook_page}}">{{i.facebook_page}}</option>
+								{% endfor %}
+
+                            </select>
+                        <br><br>
+				<input type="file" name="file" class="field" placeholder="Please Enter Builder_name">
+                <button class="btn">Upload</button>
+             </form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

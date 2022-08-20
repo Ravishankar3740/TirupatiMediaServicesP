@@ -1,4 +1,4 @@
-from .models import FacebookPages
+from .models import FacebookPages,FacebookLeadDataDumping
 from rest_framework.serializers import ModelSerializer
 
 
@@ -7,3 +7,7 @@ class FacebookPagesSerializers(ModelSerializer):
         model = FacebookPages
         exclude = ('created_at',)
 
+class FacebookLeadDataDumpingSerializers(ModelSerializer):
+    class Meta:
+        model = FacebookLeadDataDumping
+        exclude = ('created_at','is_leat_sent')
