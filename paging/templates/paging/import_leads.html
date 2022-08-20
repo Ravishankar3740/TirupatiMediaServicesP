@@ -16,12 +16,13 @@
 			<div class="right">
                 <form action="{% url 'dump_facebook_lead_data' %}" method="post" enctype="multipart/form-data">
 				    <h2>Facebook_lead File Upload</h2>
+                    {% csrf_token %}
                       <label for="facebook" style="font-size:25px;">Page name:</label>
 
                             <select name="ad_name" id="ad_name" required>
                                 <option value="">Select Ad</option>
                                 {% for i in page_name_list%}
-                            	<option value={{i.facebook_page}}>{{i.facebook_page}}</option>
+                            	<option value="{{i.facebook_page}}">{{i.facebook_page}}</option>
 								{% endfor %}
 
                             </select>
