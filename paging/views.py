@@ -88,4 +88,4 @@ class SendWhatsAPPleadToBuilder(APIView):
                                                                  {"text": "All leads has been send to your concern person",
                                                                   "icon": "success", "title": "Good job!"}]})
         return render(request, 'paging/lead_send.html',
-                      {"page_name_list": page_name_list.data,"messages": [{"text": "No leads are pendind for this Ad page", "icon": "error", "title": "Not New Leads!"}]})
+                      {"page_name_list": page_name_list.data,"messages": [{"text": "No leads are pending for this Ad page", "icon": "error", "title": "Not New Leads!"}]})
