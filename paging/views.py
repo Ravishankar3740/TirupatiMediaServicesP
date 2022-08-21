@@ -29,6 +29,7 @@ class FacebookPagePublish(APIView):
 def home_page(request):
     return render(request, 'paging/Home.html')
 
+
 class FacebookLeadDump(APIView):
     """ In this we are writing logic for dumping code into database"""
 
@@ -59,7 +60,7 @@ class SendWhatsAPPleadToBuilder(APIView):
     def get(self,request):
         page_names = FacebookPages.objects.all()
         page_name_list = FacebookPagesSerializers(page_names, many=True)
-        return render(request, 'paging/import_leads.html', {'page_name_list': page_name_list.data})
+        return render(request, 'paging/lead_send.html', {'page_name_list': page_name_list.data})
 
     def post(self,request):
         ad_name = request.data.get('ad_name')
