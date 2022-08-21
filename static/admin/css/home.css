@@ -6,7 +6,7 @@
 }
 
 body{
-    height: 100vh;
+    height: 100%;
 	width: 100%;
 	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
 	background-size: cover;
