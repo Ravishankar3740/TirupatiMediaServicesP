@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<title>Import Leads</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/admin/css/lead_send.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+</head>
+<body>
+	<div class="container">
+		<div class="contact-box">
+             <div class="left">
+                    <img src="{% static '/admin/img/wa7.png' %}" alt="">
+                </div>
+			<div class="right">
+                <form action="{% url 'send_whats_app_lead' %}" method="post" enctype="multipart/form-data">
+				    <h2>Send Leads To Whatsapp</h2>
+                    <br>
+                    {% csrf_token %}
+                      <label for="facebook" style="font-size:25px;">Page name :</label> &nbsp;
+
+                            <select name="ad_name" id="ad_name" required>
+                                <option value="">Select Ad</option>
+                                {% for i in page_name_list%}
+                            	<option value="{{i.facebook_page}}">{{i.facebook_page}}</option>
+								{% endfor %}
+
+                            </select>
+                        <br><br>
+				<!-- <input type="file" name="file" class="field" id="fUpload" placeholder="Please Enter Builder_name" onchange="checkextension()" required> -->
+                <button class="btn">submit</button>
+             </form>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
