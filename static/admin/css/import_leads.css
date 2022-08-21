@@ -8,6 +8,10 @@
 body{
 	height: 100vh;
 	width: 100%;
+	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
+	background-size: cover;
+	/ filter: blur(2px); /
+	z-index: -1;
 }
 
 .container{
@@ -20,7 +24,7 @@ body{
 	padding: 20px 100px;
 }
 
-.container:after{
+/* .container:after{
 	content: '';
 	position: absolute;
 	width: 100%;
@@ -29,9 +33,9 @@ body{
 	top: 0;
 	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
 	background-size: cover;
-	/* filter: blur(2px); */
-	z-index: -1;
-}
+	/ filter: blur(2px); /
+	/* z-index: -1;
+} */
 .contact-box{
 	max-width: 850px;
 	display: grid;
@@ -128,7 +132,7 @@ textarea{
 
 
 
-/* dropdown css */
+/ dropdown css /
 .dropbtn {
 	background-color: #2ecc71;
     color: white;

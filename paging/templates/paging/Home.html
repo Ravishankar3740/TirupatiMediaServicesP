@@ -1,26 +1,62 @@
 <!DOCTYPE html>
 {% load static %}
-<html>  
+<html>
 <head>
 	<title>Add facebook page</title>
 	<link rel = "icon" href="{% static '/admin/img/tms.jpeg' %}" type = "image/x-icon">
 	<link rel="stylesheet" type="text/css" href="{% static '/admin/css/home.css' %}">
 	<link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+
 </head>
 <body>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<a class="navbar-brand" href="">TMS</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		  <ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+			  <a class="nav-link" href="{% url 'add_facebook_page' %}">Add Page <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link" href="{% url 'dump_facebook_lead_data' %}">Import Leads</a>
+			</li>
+			<li class="nav-item">
+			  <a class="nav-link " href="{% url 'send_whats_app_lead' %}">Send Leads</a>
+			</li>
+			<!-- <li class="nav-item dropdown">
+			  <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+			  <div class="dropdown-menu" aria-labelledby="dropdown01">
+				<a class="dropdown-item" href="#">Action</a>
+				<a class="dropdown-item" href="#">Another action</a>
+				<a class="dropdown-item" href="#">Something else here</a>
+			  </div>
+			</li> -->
+		  </ul>
+		  <!-- <form class="form-inline my-2 my-lg-0">
+			<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		  </form> -->
+		</div>
+	  </nav>
 	<div class="container">
-		<div class="contact-box">
+
+		<div class="contact-box mymargin">
 			<div class="left"><img id="se" src="https://images.pexels.com/photos/5563472/pexels-photo-5563472.jpeg?auto=compress&cs=tinysrgb&w=1600" alt=""></div>
 			<div class="right">
-                <form action="{% url 'add_facebook_page' %}" method="post"> 
+                <form action="{% url 'add_facebook_page' %}" method="post">
                     <h2>Facebook adv page</h2>
 					{% csrf_token %}
                     <input type="text" name ="builder_name"class="field" placeholder="Please Enter Builder_name" required>
                     <input type="text" name="facebook_page" class="field" placeholder="Please Enter Facebook_page" required>
                     <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required>
                     <input type="date" name="published_date" class="field" placeholder="Please Enter Published_date" required>
-                    <button class="btn">Submit</button>
+                    <button class="btn" style="background-color: #2ecc71;">Submit</button>
                 </form>
 			</div>
 		</div>

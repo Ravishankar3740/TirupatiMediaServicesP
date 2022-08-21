@@ -12,9 +12,7 @@ class FacebookPagePublish(APIView):
     """In this api we are performing the crud operation for facebook page published"""
 
     def get(self, request, format=None):
-        snippets = FacebookPages.objects.all()
-        serializer = FacebookPagesSerializers(snippets, many=True)
-        return Response(serializer.data)
+        return render(request, 'paging/Home.html')
 
 
     def post(self, request, format=None):
