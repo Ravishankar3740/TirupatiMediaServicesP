@@ -79,7 +79,7 @@ class SendWhatsAPPleadToBuilder(APIView):
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
-            params = {"number": "919175346601", "type": "text", "message": message,
+            params = {"number": "91"+faacebook_page.whats_app_number, "type": "text", "message": message,
                       "instance_id": "630145B8D7452", "access_token": "fb1d7b8975b8a4a369bd0cedfa26c402"}
             data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
