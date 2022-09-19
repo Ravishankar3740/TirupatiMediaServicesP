@@ -77,8 +77,8 @@ class SendWhatsAPPleadToBuilder(APIView):
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
-                      "instance_id": "6320B5ECEA7CA", "access_token": "cc2dcd82282ddbf7f4f7b7b2021e21da"}
+            params = {"number": "91"+faacebook_page.whats_app_number, "type": "text", "message": message,
+                      "instance_id": "630145B8D7452", "access_token": "fb1d7b8975b8a4a369bd0cedfa26c402"}
             data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
             return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
@@ -87,24 +87,3 @@ class SendWhatsAPPleadToBuilder(APIView):
                                                                   "icon": "success", "title": "Good job!"}]})
         return render(request, 'paging/lead_send.html',
                       {"page_name_list": page_name_list.data,"messages": [{"text": "No leads are pending for this Ad page", "icon": "error", "title": "Not New Leads!"}]})
-
-class SendleadInPdf(APIView):
-    def get(self,request):
-        page_names = FacebookPages.objects.all()
-        page_name_list = FacebookPagesSerializers(page_names, many=True)
-        return render(request, 'paging/sendpdf.html', {'page_name_list': page_name_list.data})
-
-    def post(self, request):
-        startdate = request.POST.get('startdate')
-        enddate =  request.POST.get('enddate')
-        ad_name = request.POST.get('ad_name')
-        faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
-        lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values()
-        print("check")
-        import pdfkit as pdf
-        df = pd.DataFrame.from_dict(lead_data)
-        print(df)
-        print("ok")
-        df.to_html('f.html')
-        nazivFajla = 'z.pdf'
-        pdf.from_file('f.html', nazivFajla)

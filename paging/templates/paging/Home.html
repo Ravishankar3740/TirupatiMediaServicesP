@@ -29,10 +29,6 @@
 			<li class="nav-item">
 			  <a class="nav-link " href="{% url 'send_whats_app_lead' %}">Send Leads</a>
 			</li>
-			  <li class="nav-item">
-			  <a class="nav-link " href="{% url 'send_pdf_lead' %}">Send Pdf Leads</a>
-			</li>
-
 			<!-- <li class="nav-item dropdown">
 			  <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
 			  <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -53,15 +49,13 @@
 		<div class="contact-box mymargin">
 			<div class="left"><img id="se" src="https://images.pexels.com/photos/5563472/pexels-photo-5563472.jpeg?auto=compress&cs=tinysrgb&w=1600" alt=""></div>
 			<div class="right">
-                <form action="{% url 'add_facebook_page' %}" id="myForm" method="post">
+                <form action="{% url 'add_facebook_page' %}" method="post">
                     <h2>Facebook adv page</h2>
 					{% csrf_token %}
-					<div id="whatsapp">
-                    <input type="text" name ="builder_name"class="field" placeholder="Please Enter Builder_name" required><span></span>
-                    <input type="text" name="facebook_page" class="field" placeholder="Please Enter Facebook_page" required><span></span>
-                    <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required><a href="" style="width:70px;" class="btn btn-primary" id="plus">Add</a>
-					</div>
-                    <input type="date" name="published_date" class="field" placeholder="Please Enter Published_date" required><span></span>
+                    <input type="text" name ="builder_name"class="field" placeholder="Please Enter Builder_name" required>
+                    <input type="text" name="facebook_page" class="field" placeholder="Please Enter Facebook_page" required>
+                    <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required>
+                    <input type="date" name="published_date" class="field" placeholder="Please Enter Published_date" required>
                     <button class="btn" style="background-color: #2ecc71;">Submit</button>
                 </form>
 			</div>
@@ -72,61 +66,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-	{% comment %} {% for msg in messages %}
+	{% for msg in messages %}
 
 	swal({
 		title: '{{msg.title}}',
 		text: '{{msg.text}}',
 		icon: '{{msg.icon}}',
 	});
-	{% endfor %} {% endcomment %}
-
-	{% comment %} const container = document.getElementById('whatsapp');
-        var maxInputAllowed = 5;
-        var inputCount = 0;
-
-        function addInput(){
-            inputCount++;
-            if(inputCount>5){
-                alert('You can add maximum 5 input fields.');
-
-                return;
-            }
-            let input = document.createElement('input');
-            input.placeholder = 'enter Whatsapp no';
-            input.classList.add("field");
-			input.setAttribute("required", "");
-			input.setAttribute("id", "ash"+inputCount);
-            container.appendChild(input);
-
-        } {% endcomment %}
-
-
-{% comment %} This answer is not useful {% endcomment %}
-jQuery(document).ready( function () {
-        $("#plus").click( function(e) {
-			console.log("clicked");
-          e.preventDefault();
-        $("#whatsapp").append('<div class="">\
-                <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required><a href="#" style="padding-left: 5px; width:70px;" class="remove_this btn btn-danger">remove</a></div>');
-        return false;
-        });
-
-    jQuery(document).on('click', '.remove_this', function() {
-        jQuery(this).parent().remove();
-        return false;
-        });
-    $("input[type=submit]").click(function(e) {
-      e.preventDefault();
-      $(this).next("[name=textbox]")
-      .val(
-        $.map($(".inc :text"), function(el) {
-          return el.value
-        }).join(",\n")
-      )
-    })
-  });
-
+	{% endfor %}
 </script>
 </body>
 </html>
