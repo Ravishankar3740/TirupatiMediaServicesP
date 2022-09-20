@@ -116,9 +116,14 @@ class SendleadInPdf(APIView):
             pp.close()
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
             url = "https://betablaster.in/api/send.php"
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":"sample.pdf","message":"Send by python for testing","media_url": "http://localhost:8000/media/foo.pdf",
+            params = {"number": "91" + "9069505151", "type": "media", "filename":"sample.pdf","message":"Send by python for testing","media_url": "https://pythonists.pythonanywhere.com/media/"+ad_name+".pdf",
                       "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
             data = requests.post(url, params=params, verify=False)
+            if request.POST.get('getown'):
+                params = {"number": "91" +"9069505151", "type": "media", "filename": ad_name+".pdf",
+                          "message": "Send by python for testing", "media_url": "https://pythonists.pythonanywhere.com/media/"+ad_name+".pdf",
+                          "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                data = requests.post(url, params=params, verify=False)
             page_names = FacebookPages.objects.all()
             page_name_list = FacebookPagesSerializers(page_names, many=True)
 
