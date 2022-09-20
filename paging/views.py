@@ -6,8 +6,14 @@ from rest_framework import status
 from .serializers import FacebookPagesSerializers,FacebookLeadDataDumpingSerializers
 from .models import FacebookPages,FacebookLeadDataDumping
 import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 import requests
+import os
+from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+pdfpath = os.path.join(BASE_DIR, 'media')
 class FacebookPagePublish(APIView):
     """In this api we are performing the crud operation for facebook page published"""
 
@@ -98,18 +104,19 @@ class SendleadInPdf(APIView):
         enddate =  request.POST.get('enddate')
         ad_name = request.POST.get('ad_name')
         faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
-        lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values()
+        lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values('ad_name','full_name','phone_number','email','city')
         if lead_data:
-            # import pdfkit as pdf
-            # df = pd.DataFrame.from_dict(lead_data)
-            # print(df)
-            # print("ok")
-            # df.to_html('f.html')
-            # nazivFajla = 'z.pdf'
-            # pdf.from_file('f.html', nazivFajla)
+            df = pd.DataFrame(lead_data, columns=('ad_name','full_name','phone_number','email','city'))
+            fig, ax = plt.subplots(figsize=(12, 4))
+            ax.axis('tight')
+            ax.axis('off')
+            the_table = ax.table(cellText=df.values, colLabels=df.columns, loc='center')
+            pp = PdfPages(pdfpath +"//"+ad_name+".pdf")
+            pp.savefig(fig, bbox_inches='tight')
+            pp.close()
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
             url = "https://betablaster.in/api/send.php"
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":"sample.pdf","message":"Send by python for testing","media_url": "https://www.africau.edu/images/default/sample.pdf",
+            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":"sample.pdf","message":"Send by python for testing","media_url": "http://localhost:8000/media/foo.pdf",
                       "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
             data = requests.post(url, params=params, verify=False)
             page_names = FacebookPages.objects.all()
