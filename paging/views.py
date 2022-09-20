@@ -6,7 +6,7 @@ from rest_framework import status
 from .serializers import FacebookPagesSerializers,FacebookLeadDataDumpingSerializers
 from .models import FacebookPages,FacebookLeadDataDumping
 import pandas as pd
-
+import requests
 
 class FacebookPagePublish(APIView):
     """In this api we are performing the crud operation for facebook page published"""
@@ -72,13 +72,12 @@ class SendWhatsAPPleadToBuilder(APIView):
         if lead_data:
             ad_lead_data = FacebookLeadDataDumpingSerializers(lead_data,many=True).data
             url = "https://betablaster.in/api/send.php"
-            import requests
             message = 'Facebook Leads....\n\n\n'
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
             params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
-                      "instance_id": "6320B5ECEA7CA", "access_token": "cc2dcd82282ddbf7f4f7b7b2021e21da"}
+                      "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
             data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
             return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
@@ -100,11 +99,29 @@ class SendleadInPdf(APIView):
         ad_name = request.POST.get('ad_name')
         faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
         lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values()
-        print("check")
-        import pdfkit as pdf
-        df = pd.DataFrame.from_dict(lead_data)
-        print(df)
-        print("ok")
-        df.to_html('f.html')
-        nazivFajla = 'z.pdf'
-        pdf.from_file('f.html', nazivFajla)
+        if lead_data:
+            # import pdfkit as pdf
+            # df = pd.DataFrame.from_dict(lead_data)
+            # print(df)
+            # print("ok")
+            # df.to_html('f.html')
+            # nazivFajla = 'z.pdf'
+            # pdf.from_file('f.html', nazivFajla)
+            faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
+            url = "https://betablaster.in/api/send.php"
+            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":"sample.pdf","message":"Send by python for testing","media_url": "https://www.africau.edu/images/default/sample.pdf",
+                      "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+            data = requests.post(url, params=params, verify=False)
+            page_names = FacebookPages.objects.all()
+            page_name_list = FacebookPagesSerializers(page_names, many=True)
+
+            return render(request, 'paging/sendpdf.html', {"page_name_list": page_name_list.data,
+                                                             "messages": [
+                                                                 {"text": "Attachment Successfully send",
+                                                                  "icon": "success", "title": "Good job!"}]})
+        page_names = FacebookPages.objects.all()
+        page_name_list = FacebookPagesSerializers(page_names, many=True)
+        return render(request, 'paging/sendpdf.html', {"page_name_list": page_name_list.data,
+                                                       "messages": [
+                                                           {"text": "No data found in given range",
+                                                            "icon": "error", "title": "Data Not Found!"}]})
