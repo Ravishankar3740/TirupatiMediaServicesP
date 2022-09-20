@@ -6,11 +6,10 @@
 }
 
 body{
-    height: 100%;
-	width: 100%;
+
 	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
 	background-size: cover;
-	/ filter: blur(2px); /
+	/* filter: blur(2px); */
 	z-index: -1;
 }
 
@@ -65,7 +64,7 @@ h2:after{
 }
 
 .field{
-	width: 100%;
+	width: 75%;
 	border: 2px solid rgba(0, 0, 0, 0);
 	outline: none;
 	background-color: rgba(230, 230, 230, 0.6);
@@ -73,6 +72,7 @@ h2:after{
 	font-size: 1.1rem;
 	margin-bottom: 22px;
 	transition: .3s;
+	align-items: left;
 }
 
 .field:hover{
@@ -86,8 +86,8 @@ textarea{
 .btn{
 	width: 100%;
 	padding: 0.5rem 1rem;
-	/ background-color: #2ecc71; /
-	/ color: #fff; /
+	/* background-color: #2ecc71; */
+	/* color: #fff; */
 	font-size: 1.1rem;
 	border: none;
 	outline: none;
@@ -123,4 +123,10 @@ textarea{
 .tmscls{
 	font-family: 'Brush Script MT', cursive;
 
+}
+#whatsapp{
+	display: inline;
+}
+#plus, span {
+	padding-left: 5px;
 }

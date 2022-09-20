@@ -10,7 +10,7 @@ body{
 	width: 100%;
 	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
 	background-size: cover;
-	/ filter: blur(2px); /
+	/* filter: blur(2px); */
 	z-index: -1;
 }
 
@@ -33,16 +33,14 @@ body{
 	top: 0;
 	background: url("https://images.pexels.com/photos/439416/pexels-photo-439416.jpeg?auto=compress&cs=tinysrgb&w=1600") no-repeat center;
 	background-size: cover;
-	/ filter: blur(2px); /
+	/* filter: blur(2px); */
 	/* z-index: -1;
 } */
 .contact-box{
 	max-width: 850px;
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	justify-content: center;
-	align-items: center;
-	text-align: center;
+
 	background-color: #fff;
 	box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.19);
 }
@@ -132,7 +130,7 @@ textarea{
 
 
 
-/ dropdown css /
+/* dropdown css */
 .dropbtn {
 	background-color: #2ecc71;
     color: white;
