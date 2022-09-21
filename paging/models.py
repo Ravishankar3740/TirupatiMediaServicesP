@@ -1,4 +1,5 @@
 from django.db import models
+import jsonfield
 
 # Create your models here.
 
@@ -7,6 +8,7 @@ class FacebookPages(models.Model):
     facebook_page = models.CharField(max_length=50,null=False,blank=False,unique=True)
     whats_app_number = models.CharField(max_length=10,null=False,blank=False)
     published_date = models.DateField(null=False,blank=False)
+    multiplewhatsappno = jsonfield.JSONField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -20,6 +22,7 @@ class FacebookLeadDataDumping(models.Model):
     created_time = models.DateField(null=False,blank=False)
     city = models.CharField(max_length=50,null=False,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    interested = models.CharField(max_length=20,null=True,blank=True)
     is_lead_sent = models.BooleanField(default=False,null=True,blank=True)
 
 

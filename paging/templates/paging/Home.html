@@ -59,7 +59,7 @@
 					<div id="whatsapp">
                     <input type="text" name ="builder_name"class="field" placeholder="Please Enter Builder_name" required><span></span>
                     <input type="text" name="facebook_page" class="field" placeholder="Please Enter Facebook_page" required><span></span>
-                    <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required><a href="" style="width:70px;" class="btn btn-primary" id="plus">Add</a>
+                    <input type="text" name="whats_app_number" class="field2 " placeholder="Please Enter Whats_up_Number" required><a href="" class="btn btn-primary randombtn" id="plus">Add</a>
 					</div>
                     <input type="date" name="published_date" class="field" placeholder="Please Enter Published_date" required><span></span>
                     <button class="btn" style="background-color: #2ecc71;">Submit</button>
@@ -72,14 +72,14 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
-	{% comment %} {% for msg in messages %}
+	{% for msg in messages %}
 
 	swal({
 		title: '{{msg.title}}',
 		text: '{{msg.text}}',
 		icon: '{{msg.icon}}',
 	});
-	{% endfor %} {% endcomment %}
+	{% endfor %}
 
 	{% comment %} const container = document.getElementById('whatsapp');
         var maxInputAllowed = 5;
@@ -104,15 +104,24 @@
 
 {% comment %} This answer is not useful {% endcomment %}
 jQuery(document).ready( function () {
+		let count=0;
         $("#plus").click( function(e) {
-			console.log("clicked");
-          e.preventDefault();
-        $("#whatsapp").append('<div class="">\
-                <input type="text" name="whats_app_number" class="field" placeholder="Please Enter Whats_up_Number" required><a href="#" style="padding-left: 5px; width:70px;" class="remove_this btn btn-danger">remove</a></div>');
-        return false;
+			count++;
+			if(count==5 || count>5){
+				alert("maximum munber limit is 5");
+				e.preventDefault();
+			}
+
+			else{
+				e.preventDefault();
+        		$("#whatsapp").append('<div class=""><input type="text" name="whats_app_no'+count+'" class="field2" placeholder="Please Enter Whats_up_Number" required>'+'<a href="#" style="padding-left: 5px; width:70px;" class="remove_this btn btn-danger randombtn">remove</a></div>');
+        	return false;
+			}
         });
 
+
     jQuery(document).on('click', '.remove_this', function() {
+
         jQuery(this).parent().remove();
         return false;
         });
@@ -126,6 +135,7 @@ jQuery(document).ready( function () {
       )
     })
   });
+
 
 </script>
 </body>

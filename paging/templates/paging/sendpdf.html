@@ -22,7 +22,7 @@
 			<li class="nav-item ">
                 <a class="nav-link" href="{% url 'add_facebook_page' %}">Add Page <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item active">
+              <li class="nav-item">
                 <a class="nav-link" href="{% url 'dump_facebook_lead_data' %}">Import Leads</a>
               </li>
               <li class="nav-item">
@@ -53,7 +53,7 @@
                 </div>
 			<div class="right">
                 <form action="{% url 'send_pdf_lead' %}" method="post" enctype="multipart/form-data">
-				    <h2>Facebook_lead File Upload</h2>
+				    <h2>Get Leads In Pdf</h2>
                     {% csrf_token %}
                       <label for="facebook" style="font-size:25px;">Page name:</label>
 
@@ -70,7 +70,7 @@
 
                     <label>To Date</label>
                     <input type="date" name="enddate" class="field" placeholder="Please Enter End date" required>
-                    <input style="align-items:left;" type="checkbox" id="checkbox" onclick="checkbox1()" name="getown" value=""><span style="padding-left:10px;">Get pdf on</span>
+                    <input style="align-items:left;" type="checkbox" id="checkbox" onclick="checkbox1()" name="getown" value=""><span style="padding-left:10px;">Get pdf on: +91-9069505151</span>
                 <button style="background-color: #2ecc71;" class="btn">Send</button>
              </form>
 			</div>

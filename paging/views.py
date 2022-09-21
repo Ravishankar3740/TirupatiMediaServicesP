@@ -11,6 +11,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import requests
 import os
 from pathlib import Path
+import openpyxl
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 pdfpath = os.path.join(BASE_DIR, 'media')
@@ -25,6 +26,12 @@ class FacebookPagePublish(APIView):
             serializer = FacebookPagesSerializers(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                numbers = {}
+                if len(request.POST) >5:
+                    for i in list(request.POST.keys()):
+                        if i.startswith('whats_app_no'):
+                            numbers[i] = request.POST.get(i)
+                    FacebookPages.objects.filter(id=serializer.data.get('id')).update(multiplewhatsappno=numbers)
                 return render(request, 'paging/Home.html', {"messages": [{"text":"facebook page successfully added","icon":"success","title": "Good job!"}]})
             return render(request, 'paging/Home.html', {"messages": [{"text":"facebook page already exists","icon":"error","title": "Bad job!"}]})
 
@@ -45,7 +52,7 @@ class FacebookLeadDump(APIView):
         lead_data = request.FILES['file']
         ad_name = request.data.get('ad_name')
         page_name = FacebookPages.objects.get(facebook_page=ad_name)
-        df = pd.read_csv(lead_data)
+        df = pd.read_excel(lead_data,engine='openpyxl')
         df['facebook_page'] = page_name.id
         df['created_time'] = pd.to_datetime(df['created_time']).dt.strftime('%Y-%m-%d')
         df.rename(columns={'id': 'lead_id'},inplace = True)
@@ -82,9 +89,17 @@ class SendWhatsAPPleadToBuilder(APIView):
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
-                      "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
-            data = requests.post(url, params=params, verify=False)
+            print("test")
+            if not faacebook_page.multiplewhatsappno:
+                params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
+                          "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                data = requests.post(url, params=params, verify=False)
+            else:
+                d = list(faacebook_page.multiplewhatsappno.values())
+                for i in d:
+                    params = {"number": "91" + i, "type": "text", "message": message,
+                              "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                    data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
             return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
                                                              "messages": [
