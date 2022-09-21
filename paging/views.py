@@ -33,7 +33,7 @@ class FacebookPagePublish(APIView):
                             numbers[i] = request.POST.get(i)
                     FacebookPages.objects.filter(id=serializer.data.get('id')).update(multiplewhatsappno=numbers)
                 return render(request, 'paging/Home.html', {"messages": [{"text":"facebook page successfully added","icon":"success","title": "Good job!"}]})
-            return render(request, 'paging/Home.html', {"messages": [{"text":serializer.errors,"icon":"error","title": "Bad job!"}]})
+            return render(request, 'paging/Home.html', {"messages": [{"text":"Facebook Page Already Exists","icon":"error","title": "Bad job!"}]})
 
 
 def home_page(request):
