@@ -126,7 +126,7 @@ class SendleadInPdf(APIView):
             ax.axis('tight')
             ax.axis('off')
             the_table = ax.table(cellText=df.values, colLabels=df.columns, loc='center')
-            pp = PdfPages(pdfpath +"//"+ad_name+".pdf")
+            pp = PdfPages("//home//othersitesdata//leadapp.gruhkhoj.in//public//media//" +"//"+ad_name+".pdf")
             pp.savefig(fig, bbox_inches='tight')
             pp.close()
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
