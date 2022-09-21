@@ -8,7 +8,7 @@ class FacebookPages(models.Model):
     facebook_page = models.CharField(max_length=50,null=False,blank=False,unique=True)
     whats_app_number = models.CharField(max_length=10,null=False,blank=False)
     published_date = models.DateField(null=False,blank=False)
-    multiplewhatsappno = jsonfield.JSONField()
+    multiplewhatsappno = jsonfield.JSONField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
