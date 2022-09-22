@@ -93,13 +93,13 @@ class SendWhatsAPPleadToBuilder(APIView):
                 message += '\n'
             if not faacebook_page.multiplewhatsappno:
                 params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
-                          "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                          "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
                 data = requests.post(url, params=params, verify=False)
             else:
                 d = list(faacebook_page.multiplewhatsappno.values())
                 for i in d:
                     params = {"number": "91" + i, "type": "text", "message": message,
-                              "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                              "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
                     data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
             return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
@@ -137,12 +137,12 @@ class SendleadInPdf(APIView):
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
             url = "https://betablaster.in/api/send.php"
             params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":ad_name+".pdf","message":"Send by python for testing","media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
-                      "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                      "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
             data = requests.post(url, params=params, verify=False)
             if request.POST.get('getown'):
                 params = {"number": "91" +"7020740986", "type": "media", "filename": ad_name+".pdf",
                           "message": "Send by python for testing", "media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
-                          "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
+                          "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
                 data = requests.post(url, params=params, verify=False)
             page_names = FacebookPages.objects.all()
             page_name_list = FacebookPagesSerializers(page_names, many=True)
