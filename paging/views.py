@@ -87,7 +87,7 @@ class SendWhatsAPPleadToBuilder(APIView):
         if lead_data:
             ad_lead_data = FacebookLeadDataDumpingSerializers(lead_data,many=True).data
             url = "https://betablaster.in/api/send.php"
-            message = 'Facebook Leads....\n\n\n'
+            message = 'Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS...\n\n\n'
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
@@ -130,18 +130,19 @@ class SendleadInPdf(APIView):
             fig, ax = plt.subplots(figsize=(12, 4))
             ax.axis('tight')
             ax.axis('off')
+            plt.title('Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS')
             the_table = ax.table(cellText=df.values, colLabels=df.columns, loc='center')
             pp = PdfPages("//home//othersitesdata//leadapp.gruhkhoj.in//public//media//" +"//"+ad_name+".pdf")
             pp.savefig(fig, bbox_inches='tight')
             pp.close()
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
             url = "https://betablaster.in/api/send.php"
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":ad_name+".pdf","message":"Facebook & Instagram Leads from TIRUPATI MEDIA SERVICESS","media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
+            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":ad_name+".pdf","message":"Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS","media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
                       "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
             data = requests.post(url, params=params, verify=False)
             if request.POST.get('getown'):
                 params = {"number": "91" +"9325201010", "type": "media", "filename": ad_name+".pdf",
-                          "message": "Facebook & Instagram Leads from TIRUPATI MEDIA SERVICESS", "media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
+                          "message": "Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS", "media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
                           "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
                 data = requests.post(url, params=params, verify=False)
             page_names = FacebookPages.objects.all()
