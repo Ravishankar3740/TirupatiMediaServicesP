@@ -32,7 +32,6 @@ ALLOWED_HOSTS = ['leadapp.gruhkhoj.in','www.leadapp.gruhkhoj.in','localhost']
 # Application definition
 
 INSTALLED_APPS = [
-    'widget_tweaks',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
