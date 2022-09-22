@@ -12,9 +12,13 @@ import requests
 import os
 from pathlib import Path
 import openpyxl
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 pdfpath = os.path.join(BASE_DIR, 'media')
+
 class FacebookPagePublish(APIView):
     """In this api we are performing the crud operation for facebook page published"""
 
@@ -158,3 +162,24 @@ class SendleadInPdf(APIView):
                                                        "messages": [
                                                            {"text": "No data found in given range",
                                                             "icon": "error", "title": "Data Not Found!"}]})
+
+
+class LoginView(APIView):
+    def get(self,request):
+        return render(request,'paging/login.html')
+    def post(self,request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            return render(request, 'paging/Home.html')
+
+        else:
+            return render(request, 'paging/login.html')
+
+class LogoutView(APIView):
+    def get(self,request):
+        logout(request)
+        return render(request, 'paging/login.html')
+
+
