@@ -55,6 +55,8 @@ class FacebookLeadDump(APIView):
         df = pd.read_excel(lead_data,engine='openpyxl')
         df['facebook_page'] = page_name.id
         df['created_time'] = pd.to_datetime(df['created_time']).dt.strftime('%Y-%m-%d')
+        if 'in_which_property_are_you_interested_?' in list(df.columns):
+            df.rename(columns={'in_which_property_are_you_interested_?': 'interested'}, inplace=True)
         df.rename(columns={'id': 'lead_id'},inplace = True)
         df_json = df.to_json(orient='records')
         for i in json.loads(df_json):
@@ -89,7 +91,6 @@ class SendWhatsAPPleadToBuilder(APIView):
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
-            print("test")
             if not faacebook_page.multiplewhatsappno:
                 params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
                           "instance_id": "6329BF36277A7", "access_token": "88b2435f1513c443ca80703de1b67943"}
@@ -119,9 +120,13 @@ class SendleadInPdf(APIView):
         enddate =  request.POST.get('enddate')
         ad_name = request.POST.get('ad_name')
         faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
-        lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values('ad_name','full_name','phone_number','email','city')
+        lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values('interested','full_name','phone_number','email','city')
+        if lead_data[0]['interested']:
+            col = ('interested', 'full_name', 'phone_number', 'email', 'city')
+        else:
+            col = ('full_name', 'phone_number', 'email', 'city')
         if lead_data:
-            df = pd.DataFrame(lead_data, columns=('ad_name','full_name','phone_number','email','city'))
+            df = pd.DataFrame(lead_data, columns=col)
             fig, ax = plt.subplots(figsize=(12, 4))
             ax.axis('tight')
             ax.axis('off')
