@@ -121,11 +121,11 @@ class SendleadInPdf(APIView):
         ad_name = request.POST.get('ad_name')
         faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
         lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page, created_time__range=[startdate,enddate]).values('interested','full_name','phone_number','email','city')
-        if lead_data[0]['interested']:
-            col = ('interested', 'full_name', 'phone_number', 'email', 'city')
-        else:
-            col = ('full_name', 'phone_number', 'email', 'city')
         if lead_data:
+            if lead_data[0]['interested']:
+                col = ('interested', 'full_name', 'phone_number', 'email', 'city')
+            else:
+                col = ('full_name', 'phone_number', 'email', 'city')
             df = pd.DataFrame(lead_data, columns=col)
             fig, ax = plt.subplots(figsize=(12, 4))
             ax.axis('tight')
