@@ -131,7 +131,7 @@ class SendleadInPdf(APIView):
             ax.axis('tight')
             ax.axis('off')
             ax.table(cellText=df.values, colLabels=df.columns, loc='center')
-            ax.set_title('Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS',y=2.5)
+            ax.set_title('Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS',y=1.20)
             pp = PdfPages("//home//othersitesdata//leadapp.gruhkhoj.in//public//media//" +"//"+ad_name+".pdf")
             pp.savefig(fig, bbox_inches='tight')
             pp.close()
