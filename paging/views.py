@@ -1,8 +1,5 @@
 import json
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from django.shortcuts import render,redirect
 from .serializers import FacebookPagesSerializers,FacebookLeadDataDumpingSerializers
 from .models import FacebookPages,FacebookLeadDataDumping
 import pandas as pd
@@ -19,71 +16,72 @@ from django.contrib.auth import logout
 BASE_DIR = Path(__file__).resolve().parent.parent
 pdfpath = os.path.join(BASE_DIR, 'media')
 
-class FacebookPagePublish(APIView):
+def FacebookPagePublish(request):
     """In this api we are performing the crud operation for facebook page published"""
-
-    def get(self, request, format=None):
+    if request.method == "GET":
         return render(request, 'paging/Home.html')
 
+    else:
+        serializer = FacebookPagesSerializers(data=request.POST)
+        if serializer.is_valid():
+            serializer.save()
+            numbers = {}
+            if len(request.POST) > 5:
+                for i in list(request.POST.keys()):
+                    if i.startswith('whats_app_no'):
+                        numbers[i] = request.POST.get(i)
+                FacebookPages.objects.filter(id=serializer.data.get('id')).update(multiplewhatsappno=numbers)
+            return render(request, 'paging/lead_send.html', {
+                "messages": [{"text": "facebook page successfully added", "icon": "success", "title": "Good job!"}]})
+        return render(request, 'paging/Home.html',
+                      {"messages": [{"text": "Facebook Page Already Exists", "icon": "error", "title": "Bad job!"}]})
 
-    def post(self, request, format=None):
-            serializer = FacebookPagesSerializers(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                numbers = {}
-                if len(request.POST) >5:
-                    for i in list(request.POST.keys()):
-                        if i.startswith('whats_app_no'):
-                            numbers[i] = request.POST.get(i)
-                    FacebookPages.objects.filter(id=serializer.data.get('id')).update(multiplewhatsappno=numbers)
-                return render(request, 'paging/Home.html', {"messages": [{"text":"facebook page successfully added","icon":"success","title": "Good job!"}]})
-            return render(request, 'paging/Home.html', {"messages": [{"text":"Facebook Page Already Exists","icon":"error","title": "Bad job!"}]})
 
 
 def home_page(request):
-    return render(request, 'paging/Home.html')
+    if request.method == "GET":
+        return render(request, 'paging/Home.html')
 
 
-class FacebookLeadDump(APIView):
+def FacebookLeadDump(request):
     """ In this we are writing logic for dumping code into database"""
-
-    def get(self,request):
+    if request.method == "GET":
         page_names = FacebookPages.objects.all()
         page_name_list = FacebookPagesSerializers(page_names, many=True)
         return render(request,'paging/import_leads.html',{'page_name_list':page_name_list.data})
 
-    def post(self,request):
+    else:
         lead_data = request.FILES['file']
-        ad_name = request.data.get('ad_name')
+        ad_name = request.POST.get('ad_name')
         page_name = FacebookPages.objects.get(facebook_page=ad_name)
-        df = pd.read_excel(lead_data,engine='openpyxl')
+        df = pd.read_excel(lead_data, engine='openpyxl')
         df['facebook_page'] = page_name.id
         df['created_time'] = pd.to_datetime(df['created_time']).dt.strftime('%Y-%m-%d')
         if 'in_which_property_are_you_interested_?' in list(df.columns):
             df.rename(columns={'in_which_property_are_you_interested_?': 'interested'}, inplace=True)
-        df.rename(columns={'id': 'lead_id'},inplace = True)
+        df.rename(columns={'id': 'lead_id'}, inplace=True)
         df_json = df.to_json(orient='records')
         for i in json.loads(df_json):
-            if not FacebookLeadDataDumping.objects.filter(lead_id = i['lead_id']).exists():
+            if not FacebookLeadDataDumping.objects.filter(lead_id=i['lead_id']).exists():
                 serializer = FacebookLeadDataDumpingSerializers(data=i)
                 if serializer.is_valid():
                     serializer.save()
         page_names = FacebookPages.objects.all()
         page_name_list = FacebookPagesSerializers(page_names, many=True)
-        return render(request, 'paging/lead_send.html', {"page_name_list":page_name_list.data,
-            "messages": [{"text": "All leads has been added successfully", "icon": "success", "title": "Good job!"}]})
+        return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
+                                                         "messages": [{"text": "All leads has been added successfully",
+                                                                       "icon": "success", "title": "Good job!"}]})
 
 
-class SendWhatsAPPleadToBuilder(APIView):
+def SendWhatsAPPleadToBuilder(request):
     """ In this class we are sending leads to builder """
-
-    def get(self,request):
+    if request.method == "GET":
         page_names = FacebookPages.objects.all()
         page_name_list = FacebookPagesSerializers(page_names, many=True)
         return render(request, 'paging/lead_send.html', {'page_name_list': page_name_list.data})
 
-    def post(self,request):
-        ad_name = request.data.get('ad_name')
+    else:
+        ad_name = request.POST.get('ad_name')
         faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
         lead_data = FacebookLeadDataDumping.objects.filter(facebook_page=faacebook_page,is_lead_sent=False)
         page_names = FacebookPages.objects.all()
@@ -106,20 +104,19 @@ class SendWhatsAPPleadToBuilder(APIView):
                               "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
                     data = requests.post(url, params=params, verify=False)
             lead_data.update(is_lead_sent=True)
-            return render(request, 'paging/lead_send.html', {"page_name_list": page_name_list.data,
+            return render(request, 'paging/sendpdf.html', {"page_name_list": page_name_list.data,
                                                              "messages": [
                                                                  {"text": "All leads has been send to your concern person",
                                                                   "icon": "success", "title": "Good job!"}]})
         return render(request, 'paging/lead_send.html',
                       {"page_name_list": page_name_list.data,"messages": [{"text": "No leads are pending for this Ad page", "icon": "error", "title": "Not New Leads!"}]})
 
-class SendleadInPdf(APIView):
-    def get(self,request):
+def SendleadInPdf(request):
+    if request.method == "GET":
         page_names = FacebookPages.objects.all()
         page_name_list = FacebookPagesSerializers(page_names, many=True)
         return render(request, 'paging/sendpdf.html', {'page_name_list': page_name_list.data})
-
-    def post(self, request):
+    else:
         startdate = request.POST.get('startdate')
         enddate =  request.POST.get('enddate')
         ad_name = request.POST.get('ad_name')
@@ -164,21 +161,23 @@ class SendleadInPdf(APIView):
                                                             "icon": "error", "title": "Data Not Found!"}]})
 
 
-class LoginView(APIView):
-    def get(self,request):
+def LoginView(request):
+    if request.method == "GET":
         return render(request,'paging/login.html')
-    def post(self,request):
+    else:
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            return render(request, 'paging/Home.html')
+            return redirect('HomePage')
 
         else:
-            return render(request, 'paging/login.html')
+            return render(request, 'paging/login.html', {"messages": [
+                                                               {"text": "Invalid Credentials",
+                                                                "icon": "error", "title": "User Not Found!"}]})
 
-class LogoutView(APIView):
-    def get(self,request):
+def LogoutView(request):
+    if request.method == "GET":
         logout(request)
         return render(request, 'paging/login.html')
 
