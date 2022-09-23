@@ -31,7 +31,7 @@ def FacebookPagePublish(request):
                     if i.startswith('whats_app_no'):
                         numbers[i] = request.POST.get(i)
                 FacebookPages.objects.filter(id=serializer.data.get('id')).update(multiplewhatsappno=numbers)
-            return render(request, 'paging/lead_send.html', {
+            return render(request, 'paging/import_leads.html', {
                 "messages": [{"text": "facebook page successfully added", "icon": "success", "title": "Good job!"}]})
         return render(request, 'paging/Home.html',
                       {"messages": [{"text": "Facebook Page Already Exists", "icon": "error", "title": "Bad job!"}]})
