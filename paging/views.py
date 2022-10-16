@@ -1,4 +1,6 @@
 import json
+import time
+
 from django.shortcuts import render,redirect
 from .serializers import FacebookPagesSerializers,FacebookLeadDataDumpingSerializers
 from .models import FacebookPages,FacebookLeadDataDumping
@@ -88,21 +90,28 @@ def SendWhatsAPPleadToBuilder(request):
         page_name_list = FacebookPagesSerializers(page_names, many=True)
         if lead_data:
             ad_lead_data = FacebookLeadDataDumpingSerializers(lead_data,many=True).data
-            url = "https://betablaster.in/api/send.php"
+            url = "https://cloud.rapbooster.com/api/sendMsg"
             message = 'Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS...\n\n\n'
             for data in range(len(ad_lead_data)):
                 message = message + ad_lead_data[data].get('full_name')+'\n'+ ad_lead_data[data].get('phone_number')+'\n'+ ad_lead_data[data].get('email')+'\n'+ad_lead_data[data].get('city')+'\n'+'-------------------------------'
                 message += '\n'
             if not faacebook_page.multiplewhatsappno:
-                params = {"number": "91" + faacebook_page.whats_app_number, "type": "text", "message": message,
-                          "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
-                data = requests.post(url, params=params, verify=False)
+                payload = {
+                    'apiAuthkey': '076ca1869ea65893bf1a',
+                    'receiverMobile': "91" + faacebook_page.whats_app_number,
+                    'msg': message}
+                headers = {}
+                response = requests.request("POST", url, headers=headers, data=payload)
             else:
                 d = list(faacebook_page.multiplewhatsappno.values())
                 for i in d:
-                    params = {"number": "91" + i, "type": "text", "message": message,
-                              "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
-                    data = requests.post(url, params=params, verify=False)
+                    payload = {
+                        'apiAuthkey': '076ca1869ea65893bf1a',
+                        'receiverMobile': "91" + i,
+                        'msg': message}
+                    headers = {}
+                    time.sleep(3)
+                    response = requests.request("POST", url, headers=headers, data=payload)
             lead_data.update(is_lead_sent=True)
             return render(request, 'paging/sendpdf.html', {"page_name_list": page_name_list.data,
                                                              "messages": [
@@ -137,15 +146,24 @@ def SendleadInPdf(request):
             pp.savefig(fig, bbox_inches='tight')
             pp.close()
             faacebook_page = FacebookPages.objects.get(facebook_page=ad_name)
-            url = "https://betablaster.in/api/send.php"
-            params = {"number": "91" + faacebook_page.whats_app_number, "type": "media", "filename":ad_name+".pdf","message":"Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS","media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
-                      "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
-            data = requests.post(url, params=params, verify=False)
+            url = "https://cloud.rapbooster.com/api/sendMsg"
+            payload = {
+                'apiAuthkey': '076ca1869ea65893bf1a',
+                'receiverMobile': "91" + faacebook_page.whats_app_number,
+                'file':"http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
+                'msg': "Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS",
+                'caption':"ok"}
+            headers = {}
+            response = requests.request("POST", url, headers=headers, data=payload)
             if request.POST.get('getown'):
-                params = {"number": "91" +"9325201010", "type": "media", "filename": ad_name+".pdf",
-                          "message": "Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS", "media_url": "http://www.leadapp.gruhkhoj.in/media/"+ad_name+".pdf",
-                          "instance_id": "632C22898C690", "access_token": "099cc469861f811b7e139cf8b9cc2565"}
-                data = requests.post(url, params=params, verify=False)
+                payload = {
+                    'apiAuthkey': '076ca1869ea65893bf1a',
+                    'receiverMobile': "919325201010",
+                    'file': "http://www.leadapp.gruhkhoj.in/media/" + ad_name + ".pdf",
+                    'msg': "Facebook & Instagram Sponsor Ad Leads from TIRUPATI MEDIA SERVICESS",
+                    'caption': "ok"}
+                headers = {}
+                response = requests.request("POST", url, headers=headers, data=payload)
             page_names = FacebookPages.objects.all()
             page_name_list = FacebookPagesSerializers(page_names, many=True)
 
